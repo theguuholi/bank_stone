@@ -5,27 +5,23 @@ defmodule BankStoneWeb.UserControllerTest do
   alias BankStone.Accounts.User
 
   @create_attrs %{
-    balance: "some balance",
-    email: "some email",
+    email: "some@email",
     first_name: "some first_name",
     last_name: "some last_name",
-    password: "some password",
-    password_confirmation: "some password_confirmation",
-    password_hash: "some password_hash",
+    password: "somepassword",
+    password_confirmation: "somepassword",
     role: "some role"
   }
   @update_attrs %{
-    balance: "some updated balance",
-    email: "some updated email",
+    balance: 2000,
+    email: "some@updatedemail",
     first_name: "some updated first_name",
     last_name: "some updated last_name",
-    password: "some updated password",
-    password_confirmation: "some updated password_confirmation",
-    password_hash: "some updated password_hash",
+    password: "someupdatedpassword",
+    password_confirmation: "someupdatedpassword",
     role: "some updated role"
   }
   @invalid_attrs %{
-    balance: nil,
     email: nil,
     first_name: nil,
     last_name: nil,
