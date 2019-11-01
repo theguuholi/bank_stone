@@ -13,6 +13,7 @@ defmodule BankStoneWeb.ChannelCase do
   of the test unless the test case is marked as async.
   """
 
+  alias Ecto.Adapters.SQL.Sandbox
   use ExUnit.CaseTemplate
 
   using do
@@ -26,10 +27,10 @@ defmodule BankStoneWeb.ChannelCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(BankStone.Repo)
+    :ok = Sandbox.checkout(BankStone.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(BankStone.Repo, {:shared, self()})
+      Sandbox.mode(BankStone.Repo, {:shared, self()})
     end
 
     :ok

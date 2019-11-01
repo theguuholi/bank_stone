@@ -4,6 +4,7 @@ defmodule BankStone.Repo.Migrations.CreateUsers do
   def change do
     create table(:users, primary_key: false) do
       add :id, :uuid, primary_key: true
+      add :email, :string
       add :first_name, :string
       add :last_name, :string
       add :password_hash, :string

@@ -1,4 +1,7 @@
 defmodule BankStone.Accounts.User do
+  @moduledoc """
+    The Main reaso of this module is to manipulate Account User
+  """
   use Ecto.Schema
   import Ecto.Changeset
 
