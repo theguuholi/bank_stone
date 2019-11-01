@@ -49,4 +49,12 @@ defmodule BankStone.Accounts.User do
     |> unique_constraint(:email, message: "There is an user with this email")
     |> hash_password()
   end
+
+  defp hash_password(%Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset) do
+    change(changeset, Comeonin.Argon2.add_hash(password))
+  end
+
+  defp hash_password(changeset) do
+    changeset
+  end
 end
