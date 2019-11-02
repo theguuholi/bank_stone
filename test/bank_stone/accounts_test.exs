@@ -41,13 +41,13 @@ defmodule BankStone.AccountsTest do
     end
 
     test "list_users/0 returns all users" do
-      user = user_fixture()
-      assert Accounts.list_users() == [user]
+      user_fixture()
+      assert Enum.count(Accounts.list_users()) == 1
     end
 
     test "get_user!/1 returns the user with given id" do
       user = user_fixture()
-      assert Accounts.get_user!(user.id) == user
+      assert Accounts.get_user!(user.id).first_name == user.first_name
     end
 
     test "create_user/1 with valid data creates a user" do
