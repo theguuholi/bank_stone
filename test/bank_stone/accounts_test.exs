@@ -7,24 +7,20 @@ defmodule BankStone.AccountsTest do
     alias BankStone.Accounts.User
 
     @valid_attrs %{
-      balance: "some balance",
-      email: "some email",
+      balance: 1000,
+      email: "some@email",
       first_name: "some first_name",
       last_name: "some last_name",
-      password: "some password",
-      password_confirmation: "some password_confirmation",
-      password_hash: "some password_hash",
-      role: "some role"
+      password: "somepassword",
+      password_confirmation: "somepassword"
     }
     @update_attrs %{
-      balance: "some updated balance",
-      email: "some updated email",
+      balance: 2000,
+      email: "some@updatedemail",
       first_name: "some updated first_name",
       last_name: "some updated last_name",
-      password: "some updated password",
-      password_confirmation: "some updated password_confirmation",
-      password_hash: "some updated password_hash",
-      role: "some updated role"
+      password: "someupdatedpassword",
+      password_confirmation: "someupdatedpassword"
     }
     @invalid_attrs %{
       balance: nil,
@@ -32,9 +28,7 @@ defmodule BankStone.AccountsTest do
       first_name: nil,
       last_name: nil,
       password: nil,
-      password_confirmation: nil,
-      password_hash: nil,
-      role: nil
+      password_confirmation: nil
     }
 
     def user_fixture(attrs \\ %{}) do
@@ -58,14 +52,10 @@ defmodule BankStone.AccountsTest do
 
     test "create_user/1 with valid data creates a user" do
       assert {:ok, %User{} = user} = Accounts.create_user(@valid_attrs)
-      assert user.balance == "some balance"
-      assert user.email == "some email"
+      assert user.balance == Decimal.new("1000")
+      assert user.email == "some@email"
       assert user.first_name == "some first_name"
       assert user.last_name == "some last_name"
-      assert user.password == "some password"
-      assert user.password_confirmation == "some password_confirmation"
-      assert user.password_hash == "some password_hash"
-      assert user.role == "some role"
     end
 
     test "create_user/1 with invalid data returns error changeset" do
@@ -75,20 +65,17 @@ defmodule BankStone.AccountsTest do
     test "update_user/2 with valid data updates the user" do
       user = user_fixture()
       assert {:ok, %User{} = user} = Accounts.update_user(user, @update_attrs)
-      assert user.balance == "some updated balance"
-      assert user.email == "some updated email"
+      assert user.balance == Decimal.new("2000")
+      assert user.email == "some@updatedemail"
       assert user.first_name == "some updated first_name"
       assert user.last_name == "some updated last_name"
-      assert user.password == "some updated password"
-      assert user.password_confirmation == "some updated password_confirmation"
-      assert user.password_hash == "some updated password_hash"
-      assert user.role == "some updated role"
+      assert user.role == "user"
     end
 
     test "update_user/2 with invalid data returns error changeset" do
       user = user_fixture()
       assert {:error, %Ecto.Changeset{}} = Accounts.update_user(user, @invalid_attrs)
-      assert user == Accounts.get_user!(user.id)
+      assert user.first_name == Accounts.get_user!(user.id).first_name
     end
 
     test "delete_user/1 deletes the user" do

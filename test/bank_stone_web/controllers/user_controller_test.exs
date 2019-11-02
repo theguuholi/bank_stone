@@ -9,8 +9,7 @@ defmodule BankStoneWeb.UserControllerTest do
     first_name: "some first_name",
     last_name: "some last_name",
     password: "somepassword",
-    password_confirmation: "somepassword",
-    role: "some role"
+    password_confirmation: "somepassword"
   }
   @update_attrs %{
     balance: 2000,
@@ -18,8 +17,7 @@ defmodule BankStoneWeb.UserControllerTest do
     first_name: "some updated first_name",
     last_name: "some updated last_name",
     password: "someupdatedpassword",
-    password_confirmation: "someupdatedpassword",
-    role: "some updated role"
+    password_confirmation: "someupdatedpassword"
   }
   @invalid_attrs %{
     email: nil,
@@ -27,8 +25,7 @@ defmodule BankStoneWeb.UserControllerTest do
     last_name: nil,
     password: nil,
     password_confirmation: nil,
-    password_hash: nil,
-    role: nil
+    password_hash: nil
   }
 
   def fixture(:user) do
@@ -54,17 +51,11 @@ defmodule BankStoneWeb.UserControllerTest do
 
       conn = get(conn, Routes.user_path(conn, :show, id))
 
-      assert %{
-               "id" => id,
-               "balance" => "some balance",
-               "email" => "some email",
-               "first_name" => "some first_name",
-               "last_name" => "some last_name",
-               "password" => "some password",
-               "password_confirmation" => "some password_confirmation",
-               "password_hash" => "some password_hash",
-               "role" => "some role"
-             } = json_response(conn, 200)["data"]
+      result = json_response(conn, 200)["data"]
+
+      assert id == Map.get(result, "id")
+      assert "some first_name" == Map.get(result, "first_name")
+      assert "some@email" == Map.get(result, "email")
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
@@ -82,17 +73,10 @@ defmodule BankStoneWeb.UserControllerTest do
 
       conn = get(conn, Routes.user_path(conn, :show, id))
 
-      assert %{
-               "id" => id,
-               "balance" => "some updated balance",
-               "email" => "some updated email",
-               "first_name" => "some updated first_name",
-               "last_name" => "some updated last_name",
-               "password" => "some updated password",
-               "password_confirmation" => "some updated password_confirmation",
-               "password_hash" => "some updated password_hash",
-               "role" => "some updated role"
-             } = json_response(conn, 200)["data"]
+      result = json_response(conn, 200)["data"]
+      assert id == Map.get(result, "id")
+      assert "some updated first_name" == Map.get(result, "first_name")
+      assert "some@updatedemail" == Map.get(result, "email")
     end
 
     test "renders errors when data is invalid", %{conn: conn, user: user} do
