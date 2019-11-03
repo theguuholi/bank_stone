@@ -14,6 +14,14 @@ defmodule BankStone.AccountsTest do
       password: "somepassword",
       password_confirmation: "somepassword"
     }
+    @invalid_email %{
+      balance: 1000,
+      email: "someemail",
+      first_name: "some first_name",
+      last_name: "some last_name",
+      password: "somepassword",
+      password_confirmation: "somepassword"
+    }
     @update_attrs %{
       balance: 2000,
       email: "some@updatedemail",
@@ -29,6 +37,31 @@ defmodule BankStone.AccountsTest do
       last_name: nil,
       password: nil,
       password_confirmation: nil
+    }
+
+    @passowrd_not_match %{
+      email: "teste@teste.com",
+      first_name: "Teste",
+      last_name: "Oliveira",
+      password: "1234567",
+      password_confirmation: "12345"
+    }
+
+    @without_attrs %{
+      email: "teste@teste.com",
+      first_name: "Teste",
+      password: "teste@1234",
+      password_confirmation: "teste@1234",
+      role: "user"
+    }
+
+    @password_short %{
+      email: "teste@teste.com",
+      first_name: "Teste",
+      last_name: "Oliveira",
+      password: "123",
+      password_confirmation: "123",
+      role: "user"
     }
 
     def user_fixture(attrs \\ %{}) do
@@ -56,6 +89,26 @@ defmodule BankStone.AccountsTest do
       assert user.email == "some@email"
       assert user.first_name == "some first_name"
       assert user.last_name == "some last_name"
+    end
+
+    test "create_user/1 with password does not match" do
+      {:error, user} = Accounts.create_user(@passowrd_not_match)
+      assert "Password does not match" in errors_on(user).password_confirmation
+    end
+
+    test "create_user/1 with short password" do
+      assert {:error, %Ecto.Changeset{}} = Accounts.create_user(@password_short)
+    end
+
+    test "create_user/1 with invalid email" do
+      {:error, user} = Accounts.create_user(@invalid_email)
+      assert "Invalid email format!" in errors_on(user).email
+    end
+
+    test "create_user/1 without attibuts" do
+      assert {:error, changeset} = Accounts.create_user(@without_attrs)
+      assert "can't be blank" in errors_on(changeset).last_name
+      assert %{last_name: ["can't be blank"]} = errors_on(changeset)
     end
 
     test "create_user/1 with invalid data returns error changeset" do
