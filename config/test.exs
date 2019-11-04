@@ -5,7 +5,7 @@ config :bank_stone, BankStone.Repo,
   username: "root",
   password: "1234",
   database: "bank_stone_test",
-  hostname: "database",
+  hostname: "127.0.0.1",
   pool: Ecto.Adapters.SQL.Sandbox
 
 # We don't run a server during test. If one is required,
