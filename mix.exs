@@ -73,6 +73,7 @@ defmodule BankStone.MixProject do
       {:junit_formatter, "~> 2.1", only: :test},
       {:comeonin, "~> 4.1"},
       {:argon2_elixir, "~> 1.3"},
+      {:guardian, "~> 1.2"},
       {:distillery, "~> 1.5", runtime: false}
     ]
   end
