@@ -1,7 +1,7 @@
 defmodule BankStone.MixProject do
   use Mix.Project
 
-  @github_url "https://github.com/guuhworship/my_financial_guide"
+  @github_url "https://github.com/theguuholi/bank_stone.git"
 
   def project do
     [
