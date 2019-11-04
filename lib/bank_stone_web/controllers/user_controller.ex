@@ -30,13 +30,13 @@ defmodule BankStoneWeb.UserController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    user = Accounts.get_user(id)
+  def show(conn, _params) do
+    user = Guardian.Plug.current_resource(conn)
     render(conn, "show.json", user: user)
   end
 
-  def update(conn, %{"id" => id, "user" => user_params}) do
-    user = Accounts.get_user(id)
+  def update(conn, %{"user" => user_params}) do
+    user = Guardian.Plug.current_resource(conn)
 
     with {:ok, %User{} = user} <- Accounts.update_user(user, user_params) do
       render(conn, "show.json", user: user)

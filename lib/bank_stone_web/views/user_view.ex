@@ -16,8 +16,7 @@ defmodule BankStoneWeb.UserView do
       email: user.email,
       first_name: user.first_name,
       last_name: user.last_name,
-      role: user.role,
-      balance: user.balance
+      role: user.role
     }
   end
 
@@ -28,7 +27,6 @@ defmodule BankStoneWeb.UserView do
       first_name: user.first_name,
       last_name: user.last_name,
       role: user.role,
-      balance: user.balance,
       token: token
     }
   end

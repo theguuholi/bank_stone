@@ -23,16 +23,27 @@ defmodule BankStone.Accounts do
 
   @doc """
   Gets a single user.
-
   Raises `Ecto.NoResultsError` if the User does not exist.
+  ## Examples
+      iex> get_user!(123)
+      %User{}
+      iex> get_user!(456)
+      ** (Ecto.NoResultsError)
+  """
+  def get_user!(id), do: Repo.get!(User, id)
+
+  @doc """
+  Gets a single user.
+
+  Raises `nil` if the User does not exist.
 
   ## Examples
 
-      iex> get_user!(123)
+      iex> get_user(123)
       %User{}
 
-      iex> get_user!(456)
-      ** (Ecto.NoResultsError)
+      iex> get_user(456)
+      nil
 
   """
   def get_user(id), do: Repo.get(User, id)
@@ -71,22 +82,6 @@ defmodule BankStone.Accounts do
     user
     |> User.changeset(attrs)
     |> Repo.update()
-  end
-
-  @doc """
-  Deletes a User.
-
-  ## Examples
-
-      iex> delete_user(user)
-      {:ok, %User{}}
-
-      iex> delete_user(user)
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def delete_user(%User{} = user) do
-    Repo.delete(user)
   end
 
   @doc """
