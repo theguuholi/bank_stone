@@ -32,5 +32,4 @@ defmodule BankStoneWeb.UserController do
       render(conn, "show.json", user: user)
     end
   end
-  
 end
