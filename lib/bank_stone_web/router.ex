@@ -5,10 +5,21 @@ defmodule BankStoneWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", BankStoneWeb do
+  pipeline :auth do
+    plug BankStoneWeb.Auth.Pipeline
+  end
+
+  scope "/api/auth", BankStoneWeb do
     pipe_through :api
-    post "/users/signup", UserController, :create
-    post "/users/signin", UserController, :signin
-    resources "/users", UserController, except: [:delete, :new, :edit]
+    post "/signup", UserController, :create
+    post "/signin", UserController, :signin
+  end
+
+  scope "/api", BankStoneWeb do
+    pipe_through [:api, :auth]
+
+    get "/users", UserController, :index
+    get "/users/:id", UserController, :show
+    put "/users/:id", UserController, :update
   end
 end

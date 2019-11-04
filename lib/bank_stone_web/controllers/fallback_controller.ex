@@ -23,6 +23,6 @@ defmodule BankStoneWeb.FallbackController do
   def call(conn, {:error, :unauthorized}) do
     conn
     |> put_status(:unauthorized)
-    |> render(BusiApiWeb.ErrorView, :"401")
+    |> render(BankStoneWeb.ErrorView, :"401")
   end
 end
