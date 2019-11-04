@@ -21,4 +21,4 @@ services:
       POSTGRES_DB: bank_stone_dev
       POSTGRES_USER: root
     ports:
-      - "5432:5432z"
+      - "5432:5432"
