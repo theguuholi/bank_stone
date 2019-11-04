@@ -9,8 +9,8 @@ jobs:
       - image: circleci/postgres:10.1-alpine 
         name: database
         environment:
-          POSTGRES_USER: postgres
-          POSTGRES_DB: app_test
+          POSTGRES_USER: root
+          POSTGRES_DB: bank_stone_test
           POSTGRES_PASSWORD: 1234
 
     working_directory: ~/app
