@@ -7,6 +7,6 @@ defmodule BankStoneWeb.Router do
 
   scope "/api", BankStoneWeb do
     pipe_through :api
-    resources "/users", UserController, except: [:new, :edit]
+    resources "/users", UserController, except: [:delete, :new, :edit]
   end
 end
