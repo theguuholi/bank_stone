@@ -18,7 +18,15 @@ defmodule BankStoneWeb.UserController do
       conn
       |> put_status(:created)
       |> put_resp_header("location", Routes.user_path(conn, :show, user))
-      |> render("show.json", user: user)
+      |> render("user_auth.json", %{user: user, token: token})
+    end
+  end
+
+  def signin(conn, %{"email" => email, "password" => password}) do
+    with {:ok, user, token} <- Guardian.authenticate(email, password) do
+      conn
+      |> put_status(:created)
+      |> render("user.json", %{user: user, token: token})
     end
   end
 

@@ -15,4 +15,19 @@ defmodule BankStoneWeb.Auth.Guardian do
     resource = Accounts.get_user!(id)
     {:ok, resource}
   end
+
+  def authenticate(email, password) do
+    case Accounts.authenticate(email, password) do
+      {:ok, user} ->
+        create_token(user)
+
+      _ ->
+        {:error, :unauthorized}
+    end
+  end
+
+  defp create_token(user) do
+    {:ok, token, _claims} = encode_and_sign(user)
+    {:ok, user, token}
+  end
 end

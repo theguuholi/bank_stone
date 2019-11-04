@@ -25,7 +25,7 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-config :bank_stone, BusiApiWeb.Auth.Guardian,
+config :bank_stone, BankStoneWeb.Auth.Guardian,
   issuer: "bank_stone",
   secret_key: "V9un1cgZ0J8kPiUM4WMLg9MKAshpiUQ6a7aautzOf+HB+Godp5yI6CDy5K18rtpa"
 

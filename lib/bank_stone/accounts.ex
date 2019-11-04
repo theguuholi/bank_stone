@@ -101,4 +101,29 @@ defmodule BankStone.Accounts do
   def change_user(%User{} = user) do
     User.changeset(user, %{})
   end
+
+  @doc """
+  Gets a single user to Authenticate
+  ## Examples
+      iex> authenticate(teste@teste.com, "1234")
+      {:ok, user}
+      iex> authenticate(teste@te.com, "1234")
+      {:error, :invalid_credentials}
+  """
+  def authenticate(email, plain_text_password) do
+    query = from u in User, where: u.email == ^email
+
+    case Repo.one(query) do
+      nil ->
+        Comeonin.Argon2.dummy_checkpw()
+        {:error, :not_found}
+
+      user ->
+        if Comeonin.Argon2.checkpw(plain_text_password, user.password_hash) do
+          {:ok, user}
+        else
+          {:error, :unauthorized}
+        end
+    end
+  end
 end
