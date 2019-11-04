@@ -1,6 +1,5 @@
 # BankStone
 [![Hex version badge](https://img.shields.io/hexpm/v/bank_stone.svg)](https://hex.pm/packages/bank_stone)
-[![License badge](https://img.shields.io/hexpm/v/bank_stone.svg)](https://github.com/theguuholi/bank_stone/blob/master/LICENSE.md)
 [![CircleCI](https://circleci.com/gh/theguuholi/bank_stone.svg?style=svg)](https://circleci.com/gh/theguuholi/bank_stone)
 [![codecov](https://codecov.io/gh/theguuholi/bank_stone/branch/master/graph/badge.svg)](https://codecov.io/gh/theguuholi/bank_stone)
 
