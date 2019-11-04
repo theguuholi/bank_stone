@@ -1,0 +1,23 @@
+codecov:
+  token: ${CODECOV_TOKEN}
+  
+coverage:
+  range: 90..100
+  round: down
+  precision: 2
+  status:
+    project:
+      default: true  # disable the default status that measures entire project
+      all:
+        flags: all
+        target: 95%
+      tests:  # declare a new status context "tests"
+        target: 95%  # we always want 100% coverage here
+        flags: tests  # only include coverage in "tests/" folder
+  flags:
+    all:
+      paths:
+        - "/tmp/bank-stone-test-results/exunit/"
+    tests:
+      paths:
+        - "/tmp/bank-stone-test-results/exunit/"
