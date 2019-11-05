@@ -48,7 +48,7 @@ defmodule BankStoneWeb.UserControllerTest do
     end
   end
 
-  describe "sign up" do
+  describe "manipulate user" do
     test "renders user when data is valid", %{conn: conn} do
       user = %{
         email: "some2@email",
@@ -59,15 +59,45 @@ defmodule BankStoneWeb.UserControllerTest do
       }
 
       conn = post(conn, Routes.user_path(conn, :create), user: user)
-      assert %{"id" => id} = json_response(conn, 201)["data"]
+      result = json_response(conn, 201)
 
-      conn = get(conn, Routes.user_path(conn, :show, id))
-
-      result = json_response(conn, 200)["data"]
-
-      assert id == Map.get(result, "id")
       assert "some first_name" == Map.get(result, "first_name")
-      assert "some@email" == Map.get(result, "email")
+      assert "some2@email" == Map.get(result, "email")
+    end
+
+    test "renders user when data is notfound", %{conn: conn} do
+      user = %{
+        email: "some2@email",
+        first_name: "some first_name",
+        last_name: "some last_name",
+        passwor: "somepassword",
+        password_confirmation: "somepassword",
+        abc: "somepassword"
+      }
+
+      conn = post(conn, Routes.user_path(conn, :create), user: user)
+      result = json_response(conn, 201)
+
+      assert "some first_name" == Map.get(result, "first_name")
+      assert "some2@email" == Map.get(result, "email")
+    end
+
+    test "authenticate success", %{conn: conn} do
+      user = fixture(:user)
+
+      conn = post(conn, Routes.user_path(conn, :signin), email: user.email, password: "somepassword")
+      result = json_response(conn, 201)
+
+      assert "some first_name" == Map.get(result, "first_name")
+    end
+
+    test "authenticate invalid email", %{conn: conn} do
+      fixture(:user)
+      
+      conn = post(conn, Routes.user_path(conn, :signin), email: "dsf", password: "somepasword")
+      result = json_response(conn, 401)
+
+      assert "Unauthorized" == Map.get(result, "errors") |> Map.get("detail")
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
@@ -78,7 +108,26 @@ defmodule BankStoneWeb.UserControllerTest do
       conn = post(conn, Routes.user_path(conn, :create), user: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
     end
+
+    test "show authenticated user", %{conn: conn} do
+      user = fixture(:user)
+      {:ok, token, _} = encode_and_sign(user, %{}, token_type: :access)
+      conn = put_req_header(conn, "authorization", "bearer: " <> token)
+
+      conn = get(conn, Routes.user_path(conn, :show))
+      result = json_response(conn, 200)["data"] |> List.first()
+      assert "some@email" == Map.get(result, "email")    
+    end
+
+    test "try to show an user without authentication", %{conn: conn} do
+      fixture(:user)
+
+      conn = get(conn, Routes.user_path(conn, :show))
+      result = json_response(conn, 401)
+      assert "unauthenticated" == Map.get(result, "error")    
+    end
   end
+
 
   describe "update user" do
     test "renders user when data is valid", %{conn: conn} do
@@ -91,7 +140,7 @@ defmodule BankStoneWeb.UserControllerTest do
 
       conn = get(conn, Routes.user_path(conn, :show))
 
-      result = List.first(json_response(conn, 200)["data"])
+      result = json_response(conn, 200)["data"] |> List.first()
       assert id == Map.get(result, "id")
       assert "some updated first_name" == Map.get(result, "first_name")
       assert "some@updatedemail" == Map.get(result, "email")
