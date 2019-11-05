@@ -16,8 +16,18 @@ defmodule BankStoneWeb.UserView do
       email: user.email,
       first_name: user.first_name,
       last_name: user.last_name,
+      role: user.role
+    }
+  end
+
+  def render("user_auth.json", %{user: user, token: token}) do
+    %{
+      id: user.id,
+      email: user.email,
+      first_name: user.first_name,
+      last_name: user.last_name,
       role: user.role,
-      balance: user.balance
+      token: token
     }
   end
 end

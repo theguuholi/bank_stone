@@ -24,18 +24,18 @@ defmodule BankStone.Accounts do
   @doc """
   Gets a single user.
 
-  Raises `Ecto.NoResultsError` if the User does not exist.
+  Raises `nil` if the User does not exist.
 
   ## Examples
 
-      iex> get_user!(123)
+      iex> get_user(123)
       %User{}
 
-      iex> get_user!(456)
-      ** (Ecto.NoResultsError)
+      iex> get_user(456)
+      nil
 
   """
-  def get_user!(id), do: Repo.get!(User, id)
+  def get_user(id), do: Repo.get(User, id)
 
   @doc """
   Creates a user.
@@ -74,22 +74,6 @@ defmodule BankStone.Accounts do
   end
 
   @doc """
-  Deletes a User.
-
-  ## Examples
-
-      iex> delete_user(user)
-      {:ok, %User{}}
-
-      iex> delete_user(user)
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def delete_user(%User{} = user) do
-    Repo.delete(user)
-  end
-
-  @doc """
   Returns an `%Ecto.Changeset{}` for tracking user changes.
 
   ## Examples
@@ -100,5 +84,30 @@ defmodule BankStone.Accounts do
   """
   def change_user(%User{} = user) do
     User.changeset(user, %{})
+  end
+
+  @doc """
+  Gets a single user to Authenticate
+  ## Examples
+      iex> authenticate(teste@teste.com, "1234")
+      {:ok, user}
+      iex> authenticate(teste@te.com, "1234")
+      {:error, :invalid_credentials}
+  """
+  def authenticate(email, plain_text_password) do
+    query = from u in User, where: u.email == ^email
+
+    case Repo.one(query) do
+      nil ->
+        Comeonin.Argon2.dummy_checkpw()
+        {:error, :not_found}
+
+      user ->
+        if Comeonin.Argon2.checkpw(plain_text_password, user.password_hash) do
+          {:ok, user}
+        else
+          {:error, :unauthorized}
+        end
+    end
   end
 end

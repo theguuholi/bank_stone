@@ -29,8 +29,7 @@ defmodule BankStone.Accounts.User do
       :last_name,
       :password,
       :password_confirmation,
-      :role,
-      :balance
+      :role
     ])
     |> validate_required([
       :email,
@@ -38,8 +37,7 @@ defmodule BankStone.Accounts.User do
       :last_name,
       :password,
       :password_confirmation,
-      :role,
-      :balance
+      :role
     ])
     |> validate_format(:email, ~r/@/, message: "Invalid email format!")
     |> update_change(:email, &String.downcase(&1))

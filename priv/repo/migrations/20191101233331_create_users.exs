@@ -9,7 +9,6 @@ defmodule BankStone.Repo.Migrations.CreateUsers do
       add :last_name, :string
       add :password_hash, :string
       add :role, :string
-      add :balance, :decimal, precision: 10, scale: 2
 
       timestamps()
     end
