@@ -68,7 +68,9 @@ defmodule BankStoneWeb.UserControllerTest do
     test "authenticate success", %{conn: conn} do
       user = fixture(:user)
 
-      conn = post(conn, Routes.user_path(conn, :signin), email: user.email, password: "somepassword")
+      conn =
+        post(conn, Routes.user_path(conn, :signin), email: user.email, password: "somepassword")
+
       result = json_response(conn, 201)
 
       assert "some first_name" == Map.get(result, "first_name")
@@ -98,18 +100,17 @@ defmodule BankStoneWeb.UserControllerTest do
 
       conn = get(conn, Routes.user_path(conn, :show))
       result = json_response(conn, 200)["data"]
-      assert "some@email" == Map.get(result, "email")    
+      assert "some@email" == Map.get(result, "email")
     end
-    
+
     test "try to show an user without authentication", %{conn: conn} do
       fixture(:user)
 
       conn = get(conn, Routes.user_path(conn, :show))
       result = json_response(conn, 401)
-      assert "unauthenticated" == Map.get(result, "error")    
+      assert "unauthenticated" == Map.get(result, "error")
     end
   end
-
 
   describe "update user" do
     test "renders user when data is valid", %{conn: conn} do
