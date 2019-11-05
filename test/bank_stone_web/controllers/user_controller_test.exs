@@ -65,23 +65,6 @@ defmodule BankStoneWeb.UserControllerTest do
       assert "some2@email" == Map.get(result, "email")
     end
 
-    test "renders user when data is notfound", %{conn: conn} do
-      user = %{
-        email: "some2@email",
-        first_name: "some first_name",
-        last_name: "some last_name",
-        passwor: "somepassword",
-        password_confirmation: "somepassword",
-        abc: "somepassword"
-      }
-
-      conn = post(conn, Routes.user_path(conn, :create), user: user)
-      result = json_response(conn, 201)
-
-      assert "some first_name" == Map.get(result, "first_name")
-      assert "some2@email" == Map.get(result, "email")
-    end
-
     test "authenticate success", %{conn: conn} do
       user = fixture(:user)
 
@@ -93,7 +76,6 @@ defmodule BankStoneWeb.UserControllerTest do
 
     test "authenticate invalid email", %{conn: conn} do
       fixture(:user)
-      
       conn = post(conn, Routes.user_path(conn, :signin), email: "dsf", password: "somepasword")
       result = json_response(conn, 401)
 
@@ -115,7 +97,7 @@ defmodule BankStoneWeb.UserControllerTest do
       conn = put_req_header(conn, "authorization", "bearer: " <> token)
 
       conn = get(conn, Routes.user_path(conn, :show))
-      result = json_response(conn, 200)["data"] |> List.first()
+      result = json_response(conn, 200)["data"]
       assert "some@email" == Map.get(result, "email")    
     end
 
@@ -140,7 +122,7 @@ defmodule BankStoneWeb.UserControllerTest do
 
       conn = get(conn, Routes.user_path(conn, :show))
 
-      result = json_response(conn, 200)["data"] |> List.first()
+      result = json_response(conn, 200)["data"]
       assert id == Map.get(result, "id")
       assert "some updated first_name" == Map.get(result, "first_name")
       assert "some@updatedemail" == Map.get(result, "email")
