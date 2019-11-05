@@ -17,7 +17,7 @@ defmodule BankStoneWeb.UserController do
          {:ok, token, _claims} <- Guardian.encode_and_sign(user) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", Routes.user_path(conn, :show, user))
+      |> put_resp_header("location", Routes.user_path(conn, :show))
       |> render("user_auth.json", %{user: user, token: token})
     end
   end

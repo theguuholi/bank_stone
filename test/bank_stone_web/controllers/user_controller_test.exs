@@ -57,6 +57,7 @@ defmodule BankStoneWeb.UserControllerTest do
         password: "somepassword",
         password_confirmation: "somepassword"
       }
+
       conn = post(conn, Routes.user_path(conn, :create), user: user)
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
@@ -101,10 +102,8 @@ defmodule BankStoneWeb.UserControllerTest do
       {:ok, token, _} = encode_and_sign(user, %{}, token_type: :access)
       conn = put_req_header(conn, "authorization", "bearer: " <> token)
 
-
       conn = put(conn, Routes.user_path(conn, :update), user: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
-
 end
