@@ -100,7 +100,7 @@ defmodule BankStoneWeb.UserControllerTest do
       result = json_response(conn, 200)["data"]
       assert "some@email" == Map.get(result, "email")    
     end
-
+    
     test "try to show an user without authentication", %{conn: conn} do
       fixture(:user)
 
