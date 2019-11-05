@@ -12,7 +12,6 @@ defmodule BankStoneWeb.UserControllerTest do
     password_confirmation: "somepassword"
   }
   @update_attrs %{
-    balance: 2000,
     email: "some@updatedemail",
     first_name: "some updated first_name",
     last_name: "some updated last_name",

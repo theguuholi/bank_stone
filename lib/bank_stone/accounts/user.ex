@@ -8,7 +8,6 @@ defmodule BankStone.Accounts.User do
   @primary_key {:id, :binary_id, autogenerate: true}
   @derive {Phoenix.Param, key: :id}
   schema "users" do
-    field :balance, :decimal, default: 1000
     field :email, :string, unique: true
     field :first_name, :string
     field :last_name, :string
