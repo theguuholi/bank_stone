@@ -2,7 +2,7 @@ defmodule BankStoneWeb.UserControllerTest do
   use BankStoneWeb.ConnCase
 
   alias BankStone.Accounts
-  alias BankStone.Accounts.User
+  import BankStoneWeb.Auth.Guardian
 
   @create_attrs %{
     email: "some@email",
@@ -39,39 +39,89 @@ defmodule BankStoneWeb.UserControllerTest do
 
   describe "index" do
     test "lists all users", %{conn: conn} do
+      user = fixture(:user)
+      {:ok, token, _} = encode_and_sign(user, %{}, token_type: :access)
+      conn = put_req_header(conn, "authorization", "bearer: " <> token)
+
       conn = get(conn, Routes.user_path(conn, :index))
-      assert json_response(conn, 200)["data"] == []
+      assert Enum.count(json_response(conn, 200)["data"]) == 1
     end
   end
 
-  describe "create user" do
+  describe "manipulate user" do
     test "renders user when data is valid", %{conn: conn} do
-      conn = post(conn, Routes.user_path(conn, :create), user: @create_attrs)
-      assert %{"id" => id} = json_response(conn, 201)["data"]
+      user = %{
+        email: "some2@email",
+        first_name: "some first_name",
+        last_name: "some last_name",
+        password: "somepassword",
+        password_confirmation: "somepassword"
+      }
 
-      conn = get(conn, Routes.user_path(conn, :show, id))
+      conn = post(conn, Routes.user_path(conn, :create), user: user)
+      result = json_response(conn, 201)
 
-      result = json_response(conn, 200)["data"]
-
-      assert id == Map.get(result, "id")
       assert "some first_name" == Map.get(result, "first_name")
-      assert "some@email" == Map.get(result, "email")
+      assert "some2@email" == Map.get(result, "email")
+    end
+
+    test "authenticate success", %{conn: conn} do
+      user = fixture(:user)
+
+      conn =
+        post(conn, Routes.user_path(conn, :signin), email: user.email, password: "somepassword")
+
+      result = json_response(conn, 201)
+
+      assert "some first_name" == Map.get(result, "first_name")
+    end
+
+    test "authenticate invalid email", %{conn: conn} do
+      fixture(:user)
+      conn = post(conn, Routes.user_path(conn, :signin), email: "dsf", password: "somepasword")
+      result = json_response(conn, 401)
+
+      assert "Unauthorized" == Map.get(result, "errors") |> Map.get("detail")
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
+      user = fixture(:user)
+      {:ok, token, _} = encode_and_sign(user, %{}, token_type: :access)
+      conn = put_req_header(conn, "authorization", "bearer: " <> token)
+
       conn = post(conn, Routes.user_path(conn, :create), user: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
+    end
+
+    test "show authenticated user", %{conn: conn} do
+      user = fixture(:user)
+      {:ok, token, _} = encode_and_sign(user, %{}, token_type: :access)
+      conn = put_req_header(conn, "authorization", "bearer: " <> token)
+
+      conn = get(conn, Routes.user_path(conn, :show))
+      result = json_response(conn, 200)["data"]
+      assert "some@email" == Map.get(result, "email")
+    end
+
+    test "try to show an user without authentication", %{conn: conn} do
+      fixture(:user)
+
+      conn = get(conn, Routes.user_path(conn, :show))
+      result = json_response(conn, 401)
+      assert "unauthenticated" == Map.get(result, "error")
     end
   end
 
   describe "update user" do
-    setup [:create_user]
+    test "renders user when data is valid", %{conn: conn} do
+      user = fixture(:user)
+      {:ok, token, _} = encode_and_sign(user, %{}, token_type: :access)
+      conn = put_req_header(conn, "authorization", "bearer: " <> token)
 
-    test "renders user when data is valid", %{conn: conn, user: %User{id: id} = user} do
-      conn = put(conn, Routes.user_path(conn, :update, user), user: @update_attrs)
-      assert %{"id" => ^id} = json_response(conn, 200)["data"]
+      conn = put(conn, Routes.user_path(conn, :update), user: @update_attrs)
+      id = Guardian.Plug.current_resource(conn).id
 
-      conn = get(conn, Routes.user_path(conn, :show, id))
+      conn = get(conn, Routes.user_path(conn, :show))
 
       result = json_response(conn, 200)["data"]
       assert id == Map.get(result, "id")
@@ -79,14 +129,13 @@ defmodule BankStoneWeb.UserControllerTest do
       assert "some@updatedemail" == Map.get(result, "email")
     end
 
-    test "renders errors when data is invalid", %{conn: conn, user: user} do
-      conn = put(conn, Routes.user_path(conn, :update, user), user: @invalid_attrs)
+    test "renders errors when data is invalid", %{conn: conn} do
+      user = fixture(:user)
+      {:ok, token, _} = encode_and_sign(user, %{}, token_type: :access)
+      conn = put_req_header(conn, "authorization", "bearer: " <> token)
+
+      conn = put(conn, Routes.user_path(conn, :update), user: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
     end
-  end
-
-  defp create_user(_) do
-    user = fixture(:user)
-    {:ok, user: user}
   end
 end
