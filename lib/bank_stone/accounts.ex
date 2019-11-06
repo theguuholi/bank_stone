@@ -5,8 +5,7 @@ defmodule BankStone.Accounts do
 
   import Ecto.Query, warn: false
   alias BankStone.Repo
-
-  alias BankStone.Accounts.User
+  alias BankStone.Accounts.{Account, User}
 
   @doc """
   Returns the list of users.
@@ -18,7 +17,7 @@ defmodule BankStone.Accounts do
 
   """
   def list_users do
-    Repo.all(User)
+    Repo.all(User) |> Repo.preload(:accounts)
   end
 
   @doc """
@@ -35,7 +34,7 @@ defmodule BankStone.Accounts do
       nil
 
   """
-  def get_user(id), do: Repo.get(User, id)
+  def get_user(id), do: Repo.get(User, id) |> Repo.preload(:accounts)
 
   @doc """
   Creates a user.
@@ -50,6 +49,20 @@ defmodule BankStone.Accounts do
 
   """
   def create_user(attrs \\ %{}) do
+    case insert_user(attrs) do
+      {:ok, user} ->
+        Ecto.build_assoc(user, :accounts)
+        |> Account.changeset()
+        |> Repo.insert()
+
+        {:ok, user |> Repo.preload(:accounts)}
+
+      {:error, changeset} ->
+        {:error, changeset}
+    end
+  end
+
+  defp insert_user(attrs) do
     %User{}
     |> User.changeset(attrs)
     |> Repo.insert()
@@ -104,7 +117,7 @@ defmodule BankStone.Accounts do
 
       user ->
         if Comeonin.Argon2.checkpw(plain_text_password, user.password_hash) do
-          {:ok, user}
+          {:ok, user |> Repo.preload(:accounts)}
         else
           {:error, :unauthorized}
         end

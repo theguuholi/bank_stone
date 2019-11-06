@@ -107,7 +107,15 @@ defmodule BankStone.AccountsTest do
     end
 
     test "create_user/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Accounts.create_user(@invalid_attrs)
+      {:error, changeset} = Accounts.create_user(@invalid_attrs)
+
+      assert %{
+               email: ["can't be blank"],
+               first_name: ["can't be blank"],
+               last_name: ["can't be blank"],
+               password: ["can't be blank"],
+               password_confirmation: ["can't be blank"]
+             } = errors_on(changeset)
     end
 
     test "update_user/2 with valid data updates the user" do
