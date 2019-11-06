@@ -86,6 +86,43 @@ defmodule BankStone.Accounts do
     |> Repo.update()
   end
 
+    @doc """
+  Transfer value to other account 
+
+  ## Examples
+
+      iex> transfer_value(user, %{field: new_value})
+      {:ok, %User{}}
+
+      iex> transfer_value(user, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def transfer_value(transfer_data) do
+    value = Map.get(transfer_data, :value) |> Decimal.new()
+
+    from_account = Map.get(transfer_data, :from_account) |> find_account()
+    from_balance = %{balance: Decimal.sub(from_account.balance, value)}
+
+    to_account = Map.get(transfer_data, :to_account) |> find_account()
+    to_balance = %{balance: Decimal.add(to_account.balance, value)}
+
+
+    finalize_transfer(from_account, from_balance)
+    finalize_transfer(to_account, to_balance)
+
+    Repo.all(User) 
+  end
+
+  defp find_account(id) do
+    Repo.get(Account, id)
+  end
+
+  defp finalize_transfer(%Account{} = account, attrs) do
+    Account.changeset(account, attrs)
+    |> Repo.update()
+  end
+
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking user changes.
 
