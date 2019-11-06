@@ -18,6 +18,7 @@ defmodule BankStoneWeb.Router do
   scope "/api", BankStoneWeb do
     pipe_through [:api, :auth]
 
+    put "/operations/transfer", OperationController, :transfer
     get "/users", UserController, :index
     get "/user", UserController, :show
     put "/users", UserController, :update
