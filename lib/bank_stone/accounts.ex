@@ -86,7 +86,7 @@ defmodule BankStone.Accounts do
     |> Repo.update()
   end
 
-    @doc """
+  @doc """
   Transfer value to other account 
 
   ## Examples
@@ -107,10 +107,31 @@ defmodule BankStone.Accounts do
     to_account = Map.get(transfer_data, :to_account) |> find_account()
     to_balance = %{balance: Decimal.add(to_account.balance, value)}
 
-
     finalize_transfer(from_account, from_balance)
     finalize_transfer(to_account, to_balance)
 
+    Repo.all(User) 
+  end
+
+  @doc """
+  withdraw value to other account 
+
+  ## Examples
+
+      iex> withdraw(user, %{field: new_value})
+      {:ok, %User{}}
+
+      iex> withdraw(user, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def withdraw(withdraw_data) do
+    value = Map.get(withdraw_data, :value) |> Decimal.new()
+
+    from_account = Map.get(withdraw_data, :from_account) |> find_account()
+    from_balance = %{balance: Decimal.sub(from_account.balance, value)}
+
+    finalize_transfer(from_account, from_balance)
     Repo.all(User) 
   end
 

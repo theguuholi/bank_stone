@@ -14,4 +14,13 @@ defmodule BankStoneWeb.OperationController do
 
     render(conn, "index.json", user: user)
   end
+
+  def withdraw(conn, %{"value" => value}) do
+    user = Guardian.Plug.current_resource(conn)
+
+    %{from_account: user.accounts.id, value: value}
+    |> Accounts.withdraw()
+
+    render(conn, "index.json", user: user)
+  end
 end
