@@ -16,7 +16,7 @@ defmodule BankStone.Accounts.Account do
   end
 
   @doc false
-  def changeset(account, attrs  \\ %{}) do
+  def changeset(account, attrs \\ %{}) do
     account
     |> cast(attrs, [:balance])
     |> validate_required([:balance])

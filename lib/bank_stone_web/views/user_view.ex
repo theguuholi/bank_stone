@@ -11,7 +11,6 @@ defmodule BankStoneWeb.UserView do
   end
 
   def render("user.json", %{user: user}) do
-    IO.inspect user
     %{
       id: user.id,
       email: user.email,
