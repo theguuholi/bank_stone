@@ -5,7 +5,7 @@ defmodule BankStone.Accounts do
 
   import Ecto.Query, warn: false
   alias BankStone.Repo
-
+  alias BankStone.Accounts.Account
   alias BankStone.Accounts.User
 
   @doc """
@@ -50,9 +50,19 @@ defmodule BankStone.Accounts do
 
   """
   def create_user(attrs \\ %{}) do
-    %User{}
-    |> User.changeset(attrs)
-    |> Repo.insert()
+
+    Repo.transaction fn -> 
+      user = %User{}
+      |> User.changeset(attrs)
+      |> Repo.insert!()
+
+      Ecto.build_assoc(user, :accounts) 
+      |> Account.changeset() 
+      |> Repo.insert!()
+
+      user = user |> Repo.preload(:accounts)
+      user
+    end
   end
 
   @doc """

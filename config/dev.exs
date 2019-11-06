@@ -2,10 +2,10 @@ use Mix.Config
 
 # Configure your database
 config :bank_stone, BankStone.Repo,
-  username: "postgres",
+  username: "root",
   password: "1234",
   database: "bank_stone_dev",
-  hostname: "localhost",
+  hostname: "database",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
