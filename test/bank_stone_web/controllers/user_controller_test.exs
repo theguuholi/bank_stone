@@ -76,8 +76,7 @@ defmodule BankStoneWeb.UserControllerTest do
     end
 
     test "authenticate invalid email", %{conn: conn} do
-      fixture(:user)
-      conn = post(conn, Routes.user_path(conn, :signin), email: "dsf", password: "somepasword")
+      conn = post(conn, Routes.user_path(conn, :signin), email: "23423", password: "somepassword")
       result = json_response(conn, 401)
 
       assert "Unauthorized" == Map.get(result, "errors") |> Map.get("detail")

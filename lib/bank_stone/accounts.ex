@@ -6,6 +6,7 @@ defmodule BankStone.Accounts do
   import Ecto.Query, warn: false
   alias BankStone.Repo
   alias BankStone.Accounts.{Account, User}
+  alias BankStone.Accounts.Operations
 
   @doc """
   Returns the list of users.
@@ -84,6 +85,50 @@ defmodule BankStone.Accounts do
     user
     |> User.changeset(attrs)
     |> Repo.update()
+  end
+
+  @doc """
+  Transfer value to other account 
+
+  ## Examples
+
+      iex> transfer_value(user, %{field: new_value})
+      {:ok, %User{}}
+
+      iex> transfer_value(user, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def transfer_value(transfer_data) do
+    value = Map.get(transfer_data, :value) |> Decimal.new()
+    operation_sub = Map.get(transfer_data, :from_account) |> Operations.perform(value, :sub)
+
+    case operation_sub do
+      {:ok, _} -> Map.get(transfer_data, :to_account) |> Operations.perform(value, :add)
+      {:error, msg} -> {:error, msg}
+    end
+  end
+
+  @doc """
+  withdraw value to other account 
+
+  ## Examples
+
+      iex> withdraw(user, %{field: new_value})
+      {:ok, %User{}}
+
+      iex> withdraw(user, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def withdraw(withdraw_data) do
+    value = Map.get(withdraw_data, :value) |> Decimal.new()
+    operation_sub = Map.get(withdraw_data, :from_account) |> Operations.perform(value, :sub)
+
+    case operation_sub do
+      {:ok, _} -> operation_sub
+      {:error, msg} -> {:error, msg}
+    end
   end
 
   @doc """
