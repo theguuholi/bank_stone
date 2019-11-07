@@ -13,11 +13,10 @@ defmodule BankStoneWeb.FallbackController do
     |> render("error.json", changeset: changeset)
   end
 
-  def call(conn, {:error, :not_found}) do
+  def call(conn, {:error, :not_found, msg}) do
     conn
     |> put_status(:not_found)
-    |> put_view(BankStoneWeb.ErrorView)
-    |> render(:"404")
+    |> json(%{error: msg})
   end
 
   def call(conn, {:error, :unauthorized}) do

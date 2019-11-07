@@ -6,6 +6,7 @@ defmodule BankStone.Accounts do
   import Ecto.Query, warn: false
   alias BankStone.Repo
   alias BankStone.Accounts.{Account, User}
+  alias BankStone.Accounts.Operations
 
   @doc """
   Returns the list of users.
@@ -100,17 +101,12 @@ defmodule BankStone.Accounts do
   """
   def transfer_value(transfer_data) do
     value = Map.get(transfer_data, :value) |> Decimal.new()
+    operation_sub = Map.get(transfer_data, :from_account) |> Operations.perform(value, :sub)
 
-    from_account = Map.get(transfer_data, :from_account) |> find_account()
-    from_balance = %{balance: Decimal.sub(from_account.balance, value)}
-
-    to_account = Map.get(transfer_data, :to_account) |> find_account()
-    to_balance = %{balance: Decimal.add(to_account.balance, value)}
-
-    finalize_transfer(from_account, from_balance)
-    finalize_transfer(to_account, to_balance)
-
-    Repo.all(User) 
+    case operation_sub do
+      {:ok, _} -> Map.get(transfer_data, :to_account) |> Operations.perform(value, :add)
+      {:error, msg} -> {:error, msg}
+    end
   end
 
   @doc """
@@ -127,21 +123,12 @@ defmodule BankStone.Accounts do
   """
   def withdraw(withdraw_data) do
     value = Map.get(withdraw_data, :value) |> Decimal.new()
+    operation_sub = Map.get(withdraw_data, :from_account) |> Operations.perform(value, :sub)
 
-    from_account = Map.get(withdraw_data, :from_account) |> find_account()
-    from_balance = %{balance: Decimal.sub(from_account.balance, value)}
-
-    finalize_transfer(from_account, from_balance)
-    Repo.all(User) 
-  end
-
-  defp find_account(id) do
-    Repo.get(Account, id)
-  end
-
-  defp finalize_transfer(%Account{} = account, attrs) do
-    Account.changeset(account, attrs)
-    |> Repo.update()
+    case operation_sub do
+      {:ok, _} -> operation_sub
+      {:error, msg} -> {:error, msg}
+    end
   end
 
   @doc """

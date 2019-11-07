@@ -1,13 +1,11 @@
 defmodule BankStoneWeb.OperationView do
   use BankStoneWeb, :view
 
-  def render("index.json", %{user: user}) do
-    %{data: render_one(user, __MODULE__, "user.json", as: :user)}
+  def render("index.json", %{operation: operation}) do
+    %{data: render_one(operation, __MODULE__, "operation.json")}
   end
 
-  def render("user.json", %{user: user}) do
-    %{
-      id: user.id
-    }
+  def render("operation.json", %{operation: operation}) do
+    %{message: operation}
   end
 end
