@@ -14,12 +14,8 @@ defmodule BankStoneWeb.TransactionController do
   end
 
   def month(conn, params) do
-    IO.inspect(params)
-    IO.inspect("month")
   end
 
   def day(conn, params) do
-    IO.inspect(params)
-    IO.inspect("day")
   end
 end
