@@ -7,6 +7,7 @@ defmodule BankStone.Accounts do
   alias BankStone.Repo
   alias BankStone.Accounts.{Account, User}
   alias BankStone.Accounts.Operations
+  alias BankStone.Transactions
 
   @doc """
   Returns the list of users.
@@ -93,10 +94,10 @@ defmodule BankStone.Accounts do
   ## Examples
 
       iex> transfer_value(user, %{field: new_value})
-      {:ok, %User{}}
+      {:ok, %Transaction{}}
 
       iex> transfer_value(user, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
+      {:error, msg}
 
   """
   def transfer_value(transfer_data) do
@@ -104,8 +105,20 @@ defmodule BankStone.Accounts do
     operation_sub = Map.get(transfer_data, :from_account) |> Operations.perform(value, :sub)
 
     case operation_sub do
-      {:ok, _} -> Map.get(transfer_data, :to_account) |> Operations.perform(value, :add)
-      {:error, msg} -> {:error, msg}
+      {:ok, account_from} ->
+        {:ok, account_to} = Map.get(transfer_data, :to_account) |> Operations.perform(value, :add)
+
+        %{
+          value: value,
+          account_from: account_from.id,
+          type: "transfer",
+          account_to: account_to.id,
+          date: Date.utc_today()
+        }
+        |> Transactions.insert_transaction()
+
+      {:error, msg} ->
+        {:error, msg}
     end
   end
 
@@ -126,8 +139,20 @@ defmodule BankStone.Accounts do
     operation_sub = Map.get(withdraw_data, :from_account) |> Operations.perform(value, :sub)
 
     case operation_sub do
-      {:ok, _} -> operation_sub
-      {:error, msg} -> {:error, msg}
+      {:ok, operation} ->
+        %{
+          value: value,
+          account_from: operation.id,
+          type: "withdraw",
+          account_to: nil,
+          date: Date.utc_today()
+        }
+        |> Transactions.insert_transaction()
+
+        operation_sub
+
+      {:error, msg} ->
+        {:error, msg}
     end
   end
 

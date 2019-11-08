@@ -20,6 +20,12 @@ defmodule BankStoneWeb.Router do
 
     put "/operations/transfer", OperationController, :transfer
     put "/operations/withdraw", OperationController, :withdraw
+
+    get "/transactions/all", TransactionController, :all
+    get "/transactions/year/:year", TransactionController, :year
+    get "/transactions/year/:year/month/:month", TransactionController, :month
+    get "/transactions/day/:date", TransactionController, :day
+
     get "/users", UserController, :index
     get "/user", UserController, :show
     put "/users", UserController, :update
