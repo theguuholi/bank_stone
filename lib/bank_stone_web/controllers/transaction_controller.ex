@@ -13,9 +13,11 @@ defmodule BankStoneWeb.TransactionController do
     render(conn, "show.json", transaction: Transactions.year(year))
   end
 
-  def month(conn, params) do
+  def month(conn, %{"year" => year, "month" => month}) do
+    render(conn, "show.json", transaction: Transactions.month(year, month))
   end
 
-  def day(conn, params) do
+  def day(conn, %{"year" => year, "month" => month, "day" => day}) do
+    render(conn, "show.json", transaction: Transactions.month(year, month, day))
   end
 end

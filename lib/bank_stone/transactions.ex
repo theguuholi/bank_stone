@@ -4,7 +4,8 @@ defmodule BankStone.Transactions do
   """
 
   import Ecto.Query, warn: false
-  alias BankStone.Repo
+
+  alias BankStone.Transactions.Filter
   alias BankStone.Transactions.Transaction
 
   @doc """
@@ -13,10 +14,10 @@ defmodule BankStone.Transactions do
   ## Examples
 
       iex> all()
-      %{total: 1000, transactions: [%User{}, ...]}
+      %{total: 1000, transactions: [%Transactions{}, ...]}
   """
   def all do
-    list_transactions()
+    Filter.list_transactions()
     |> create_payload()
   end
 
@@ -25,13 +26,26 @@ defmodule BankStone.Transactions do
 
   ## Examples
 
-      iex> all()
-      %{total: 1000, transactions: [%User{}, ...]}
+      iex> year(year)
+      %{total: 1000, transactions: [%Transactions{}, ...]}
   """
   def year(year) do
     transactions =
-      list_transactions()
-      |> by_year(year)
+      Filter.by_year(year)
+      |> create_payload()
+  end
+
+  @doc """
+  Returns all transactions by month and total value
+
+  ## Examples
+
+      iex> month(year, month)
+      %{total: 1000, transactions: [%Transactions{}, ...]}
+  """
+  def month(year, month) do
+    transactions =
+      Filter.by_month(year, month)
       |> create_payload()
   end
 
@@ -41,9 +55,6 @@ defmodule BankStone.Transactions do
       transactions: transactions
     }
   end
-
-  def by_year(transactions, year),
-    do: Enum.filter(transactions, &(&1.date.year == String.to_integer(year)))
 
   defp calculate_value(trasactions) do
     Enum.map(trasactions, fn t -> Decimal.to_float(t.value) end)
@@ -55,6 +66,4 @@ defmodule BankStone.Transactions do
     |> Transaction.changeset(attrs)
     |> Repo.insert()
   end
-
-  def list_transactions, do: Repo.all(Transaction)
 end
