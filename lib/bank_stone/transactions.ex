@@ -30,9 +30,8 @@ defmodule BankStone.Transactions do
       %{total: 1000, transactions: [%Transactions{}, ...]}
   """
   def year(year) do
-    transactions =
-      Filter.by_year(year)
-      |> create_payload()
+    Filter.by_year(year)
+    |> create_payload()
   end
 
   @doc """
@@ -44,9 +43,8 @@ defmodule BankStone.Transactions do
       %{total: 1000, transactions: [%Transactions{}, ...]}
   """
   def month(year, month) do
-    transactions =
-      Filter.by_month(year, month)
-      |> create_payload()
+    Filter.by_month(year, month)
+    |> create_payload()
   end
 
   defp create_payload(transactions) do
