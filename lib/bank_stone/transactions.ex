@@ -5,6 +5,7 @@ defmodule BankStone.Transactions do
 
   import Ecto.Query, warn: false
 
+  alias BankStone.Repo
   alias BankStone.Transactions.Filter
   alias BankStone.Transactions.Transaction
 
@@ -47,6 +48,19 @@ defmodule BankStone.Transactions do
     |> create_payload()
   end
 
+  @doc """
+  Returns all transactions by date and total value
+
+  ## Examples
+
+      iex> day(year, month)
+      %{total: 1000, transactions: [%Transactions{}, ...]}
+  """
+  def day(date) do
+    Filter.by_day(date)
+    |> create_payload()
+  end
+
   defp create_payload(transactions) do
     %{
       total: calculate_value(transactions),
@@ -59,6 +73,18 @@ defmodule BankStone.Transactions do
     |> Enum.sum()
   end
 
+  @doc """
+  Creates a Transaction.
+
+  ## Examples
+
+      iex> insert_transaction(%{field: value})
+      {:ok, %Transaction{}}
+
+      iex> create_user(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
   def insert_transaction(attrs) do
     %Transaction{}
     |> Transaction.changeset(attrs)

@@ -94,10 +94,10 @@ defmodule BankStone.Accounts do
   ## Examples
 
       iex> transfer_value(user, %{field: new_value})
-      {:ok, %User{}}
+      {:ok, %Transaction{}}
 
       iex> transfer_value(user, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
+      {:error, msg}
 
   """
   def transfer_value(transfer_data) do
