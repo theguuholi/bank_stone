@@ -14,8 +14,8 @@ defmodule BankStoneWeb.OperationController do
       |> Accounts.transfer_value()
 
     case operation do
-      {:ok, account} ->
-        render(conn, "index.json", operation: "Transfer to: #{account.id} Success")
+      {:ok, transaction} ->
+        render(conn, "index.json", operation: "Transfer to: #{transaction.account_to} Success")
 
       {:error, msg} ->
         {:error, :not_found, msg}

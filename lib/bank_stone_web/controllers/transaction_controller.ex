@@ -5,7 +5,7 @@ defmodule BankStoneWeb.TransactionController do
 
   action_fallback BankStoneWeb.FallbackController
 
-  def all(conn, params) do
+  def all(conn, _params) do
     render(conn, "show.json", transaction: Transactions.all())
   end
 
@@ -17,7 +17,7 @@ defmodule BankStoneWeb.TransactionController do
     render(conn, "show.json", transaction: Transactions.month(year, month))
   end
 
-  def day(conn, %{"year" => year, "month" => month, "day" => day}) do
-    render(conn, "show.json", transaction: Transactions.month(year, month, day))
+  def day(conn, %{"date" => date}) do
+    render(conn, "show.json", transaction: Transactions.day(date))
   end
 end

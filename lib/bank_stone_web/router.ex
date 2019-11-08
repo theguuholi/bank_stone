@@ -24,7 +24,7 @@ defmodule BankStoneWeb.Router do
     get "/transactions/all", TransactionController, :all
     get "/transactions/year/:year", TransactionController, :year
     get "/transactions/year/:year/month/:month", TransactionController, :month
-    get "/transactions/year/:year/month/:month/day/:day", TransactionController, :day
+    get "/transactions/day/:date", TransactionController, :day
 
     get "/users", UserController, :index
     get "/user", UserController, :show
