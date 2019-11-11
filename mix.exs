@@ -45,7 +45,7 @@ defmodule BankStone.MixProject do
   def application do
     [
       mod: {BankStone.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :bamboo, :bamboo_smtp]
     ]
   end
 
@@ -75,7 +75,9 @@ defmodule BankStone.MixProject do
       {:argon2_elixir, "~> 1.3"},
       {:guardian, "~> 1.2"},
       {:poison, "~> 3.1"},
-      {:distillery, "~> 1.5", runtime: false}
+      {:distillery, "~> 1.5", runtime: false},
+      {:bamboo_smtp, "~> 2.1.0"},
+      {:bamboo, "~> 1.3"}
     ]
   end
 

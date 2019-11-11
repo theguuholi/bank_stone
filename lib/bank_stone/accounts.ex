@@ -149,6 +149,11 @@ defmodule BankStone.Accounts do
         }
         |> Transactions.insert_transaction()
 
+        operation 
+        |> Repo.preload(:user)
+        |> BankStone.Email.Email.withdraw_email(value) 
+        |> BankStone.Email.Mailer.deliver_now()
+
         operation_sub
 
       {:error, msg} ->
