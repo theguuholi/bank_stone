@@ -1,24 +1,24 @@
-version: '3'
+version: '3.1'
+
 services:
-  api:
-    container_name: api
-    build: .
-    command: /bin/bash docker_start.sh
-    volumes:
-      - .:/bank_stone
-    ports:
-      - "4000:4000"
-    links:
-      - database
   database:
-    container_name: database
     image: postgres
     restart: always
-    volumes:
-      - "./volumes/datadir:/var/lib/postgres"
     environment:
-      POSTGRES_PASSWORD: 1234
-      POSTGRES_DB: bank_stone_dev
-      POSTGRES_USER: root
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: bank_stone_prod
+
+  api:
+    image: bank_stone_app
+    restart: always
     ports:
-      - "5432:5432"
+      - ${APP_PORT}:${APP_PORT}
+    environment:
+      APP_PORT: ${APP_PORT}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: ${DB_HOST}
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+    depends_on:
+      - database

@@ -17,6 +17,24 @@ defmodule BankStoneWeb.Endpoint do
     plug Phoenix.CodeReloader
   end
 
+  @doc """
+  Callback invoked for dynamically configuring the endpoint.
+
+  It receives the endpoint configuration and checks if
+  configuration should be loaded from the system environment.
+  """
+  def init(_key, config) do
+    if config[:load_from_system_env] do
+      port =
+        Application.get_env(:bank_stone, :app_port) ||
+          raise "expected the PORT environment variable to be set"
+
+      {:ok, Keyword.put(config, :http, [:inet6, port: port])}
+    else
+      {:ok, config}
+    end
+  end
+
   plug Plug.RequestId
   plug Plug.Telemetry, event_prefix: [:phoenix, :endpoint]
 
