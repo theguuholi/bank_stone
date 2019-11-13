@@ -45,7 +45,7 @@ defmodule BankStoneWeb.OperationControllerTest do
       result = json_response(conn, 200)["data"]
 
       expected = %{"message" => "Transfer to: #{user_account.accounts.id} Success"}
-      assert result == expected
+      assert expected == result
 
       conn = get(conn, Routes.user_path(conn, :show))
       result = json_response(conn, 200)["data"]
