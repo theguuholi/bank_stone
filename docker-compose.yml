@@ -8,6 +8,8 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: bank_stone_prod
+    ports:
+      - "5434:5432"
 
   api:
     image: bank_stone_app
