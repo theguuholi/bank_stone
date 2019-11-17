@@ -23,6 +23,19 @@ defmodule BankStone.Accounts do
   end
 
   @doc """
+  Returns the list of Accounts.
+
+  ## Examples
+
+      iex> list_accounts()
+      [%Account{}, ...]
+
+  """
+  def list_accounts do
+    Repo.all(Account)
+  end
+
+  @doc """
   Gets a single user.
 
   Raises `nil` if the User does not exist.

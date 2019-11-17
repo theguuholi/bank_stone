@@ -7,7 +7,6 @@ defmodule BankStone.AccountsTest do
     alias BankStone.Accounts.User
 
     @valid_attrs %{
-      balance: 1000,
       email: "some@email",
       first_name: "some first_name",
       last_name: "some last_name",
@@ -15,7 +14,6 @@ defmodule BankStone.AccountsTest do
       password_confirmation: "somepassword"
     }
     @invalid_email %{
-      balance: 1000,
       email: "someemail",
       first_name: "some first_name",
       last_name: "some last_name",
@@ -23,7 +21,6 @@ defmodule BankStone.AccountsTest do
       password_confirmation: "somepassword"
     }
     @update_attrs %{
-      balance: 2000,
       email: "some@updatedemail",
       first_name: "some updated first_name",
       last_name: "some updated last_name",
@@ -31,7 +28,6 @@ defmodule BankStone.AccountsTest do
       password_confirmation: "someupdatedpassword"
     }
     @invalid_attrs %{
-      balance: nil,
       email: nil,
       first_name: nil,
       last_name: nil,
