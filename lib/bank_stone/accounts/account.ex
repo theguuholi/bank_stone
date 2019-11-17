@@ -1,6 +1,6 @@
 defmodule BankStone.Accounts.Account do
   @moduledoc """
-    The Main reaso of this module is to create account to user
+    The Main reason of this module is to create account to user
   """
   use Ecto.Schema
   import Ecto.Changeset

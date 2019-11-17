@@ -7,6 +7,7 @@ defmodule BankStone.Accounts do
   alias BankStone.Repo
   alias BankStone.Accounts.{Account, User}
   alias BankStone.Accounts.Operations
+  alias BankStone.Email, as: EmailServer
   alias BankStone.Transactions
 
   @doc """
@@ -20,6 +21,19 @@ defmodule BankStone.Accounts do
   """
   def list_users do
     Repo.all(User) |> Repo.preload(:accounts)
+  end
+
+  @doc """
+  Returns the list of Accounts.
+
+  ## Examples
+
+      iex> list_accounts()
+      [%Account{}, ...]
+
+  """
+  def list_accounts do
+    Repo.all(Account)
   end
 
   @doc """
@@ -148,6 +162,11 @@ defmodule BankStone.Accounts do
           date: Date.utc_today()
         }
         |> Transactions.insert_transaction()
+
+        operation
+        |> Repo.preload(:user)
+        |> EmailServer.Email.withdraw_email(value)
+        |> EmailServer.Mailer.deliver_now()
 
         operation_sub
 
