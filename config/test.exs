@@ -2,10 +2,10 @@ use Mix.Config
 
 # Configure your database
 config :bank_stone, BankStone.Repo,
-  username: "postgres",
-  password: "1234",
-  database: "bank_stone_test",
-  hostname: "localhost",
+  username: System.get_env("TEST_DB_USERNAME"),
+  password: System.get_env("TEST_DB_PASSWORD"),
+  database: System.get_env("TEST_DB_DATABASE"),
+  hostname: System.get_env("TEST_DB_HOSTNAME"),
   pool: Ecto.Adapters.SQL.Sandbox
 
 # We don't run a server during test. If one is required,
