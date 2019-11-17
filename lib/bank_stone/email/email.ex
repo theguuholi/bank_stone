@@ -9,7 +9,10 @@ defmodule BankStone.Email.Email do
       to: account.user.email,
       from: "g.92oliveira@gmail.com",
       subject: "STONE - You Performed a withdraw ",
-      html_body: "<strong>#{account.user.first_name}</strong><p>Withdraw Amount: #{value}</p><p>New Balance: #{account.balance}</p>",
+      html_body:
+        "<strong>#{account.user.first_name}</strong><p>Withdraw Amount: #{value}</p><p>New Balance: #{
+          account.balance
+        }</p>",
       text_body: "Thanks for joining!"
     )
   end

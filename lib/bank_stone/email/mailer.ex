@@ -1,3 +1,6 @@
 defmodule BankStone.Email.Mailer do
-    use Bamboo.Mailer, otp_app: :bank_stone
-  end
+  @moduledoc """
+    This module is responsible for email server
+  """
+  use Bamboo.Mailer, otp_app: :bank_stone
+end

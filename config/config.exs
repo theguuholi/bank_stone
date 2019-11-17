@@ -27,16 +27,16 @@ config :phoenix, :json_library, Jason
 
 config :bank_stone, BankStone.Email.Mailer,
   adapter: Bamboo.SMTPAdapter,
-  server:  System.get_env("EMAIL_SMTP"),
+  server: System.get_env("EMAIL_SMTP"),
   hostname: System.get_env("EMAIL_HOSTNAME"),
   port: System.get_env("EMAIL_PORT"),
   username: System.get_env("EMAIL_USERNAME"),
-  password: System.get_env("EMAIL_PASSWORD"), 
+  password: System.get_env("EMAIL_PASSWORD"),
   tls: :if_available,
   allowed_tls_versions: [:tlsv1, :"tlsv1.1", :"tlsv1.2"],
   ssl: false,
   retries: 1
-  
+
 config :bank_stone, BankStoneWeb.Auth.Guardian,
   issuer: "bank_stone",
   secret_key: System.get_env("AUTH_GUARDIAN")
