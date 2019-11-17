@@ -14,8 +14,7 @@ config :bank_stone, BankStoneWeb.Endpoint,
   http: [port: 4002],
   server: false
 
-config :bank_stone, BankStone.Email.Mailer,
-  adapter: Bamboo.TestAdapter
+config :bank_stone, BankStone.Email.Mailer, adapter: Bamboo.TestAdapter
 
 # Print only warnings and errors during test
 config :logger, level: :warn
