@@ -7,6 +7,7 @@ defmodule BankStone.Accounts do
   alias BankStone.Repo
   alias BankStone.Accounts.{Account, User}
   alias BankStone.Accounts.Operations
+  alias BankStone.Email, as: EmailServer
   alias BankStone.Transactions
 
   @doc """
@@ -161,6 +162,11 @@ defmodule BankStone.Accounts do
           date: Date.utc_today()
         }
         |> Transactions.insert_transaction()
+
+        operation
+        |> Repo.preload(:user)
+        |> EmailServer.Email.withdraw_email(value)
+        |> EmailServer.Mailer.deliver_now()
 
         operation_sub
 

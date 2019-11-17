@@ -13,7 +13,7 @@ config :bank_stone,
 # Configures the endpoint
 config :bank_stone, BankStoneWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "8U4WP9j8MFD2JSaK1dAh4lDmoREjugeZdemtUTjnSKuHabSJK1qcAbcG1rnnIH7H",
+  secret_key_base: System.get_env("APP_KEY_SECRET"),
   render_errors: [view: BankStoneWeb.ErrorView, accepts: ~w(json)],
   pubsub: [name: BankStone.PubSub, adapter: Phoenix.PubSub.PG2]
 
@@ -25,9 +25,21 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+config :bank_stone, BankStone.Email.Mailer,
+  adapter: Bamboo.SMTPAdapter,
+  server: System.get_env("EMAIL_SMTP"),
+  hostname: System.get_env("EMAIL_HOSTNAME"),
+  port: System.get_env("EMAIL_PORT"),
+  username: System.get_env("EMAIL_USERNAME"),
+  password: System.get_env("EMAIL_PASSWORD"),
+  tls: :if_available,
+  allowed_tls_versions: [:tlsv1, :"tlsv1.1", :"tlsv1.2"],
+  ssl: false,
+  retries: 1
+
 config :bank_stone, BankStoneWeb.Auth.Guardian,
   issuer: "bank_stone",
-  secret_key: "V9un1cgZ0J8kPiUM4WMLg9MKAshpiUQ6a7aautzOf+HB+Godp5yI6CDy5K18rtpa"
+  secret_key: System.get_env("AUTH_GUARDIAN")
 
 if Mix.env() == :test do
   config :junit_formatter,

@@ -19,6 +19,6 @@ services:
     environment:
       POSTGRES_PASSWORD: 1234
       POSTGRES_DB: bank_stone_dev
-      POSTGRES_USER: root
+      POSTGRES_USER: postgres
     ports:
-      - "5432:5432"
+      - "5433:5433"

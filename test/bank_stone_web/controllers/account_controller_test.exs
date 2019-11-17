@@ -12,14 +12,6 @@ defmodule BankStoneWeb.AccountControllerTest do
     password_confirmation: "somepassword"
   }
 
-  @create_user %{
-    email: "some2@email",
-    first_name: "some first_name",
-    last_name: "some last_name",
-    password: "somepassword",
-    password_confirmation: "somepassword"
-  }
-
   def fixture(:user) do
     {:ok, user} = Accounts.create_user(@create_attrs)
     user

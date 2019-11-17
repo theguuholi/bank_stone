@@ -28,3 +28,4 @@ bank_stone-*.tar
 /priv/static/
 
 .DS_Store
+.env
