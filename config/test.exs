@@ -2,10 +2,10 @@ use Mix.Config
 
 # Configure your database
 config :bank_stone, BankStone.Repo,
-  username: ${"DB_USERNAME"},
-  password: ${"DB_PASSWORD"},
-  database: ${"DB_DATABASE_TEST"},
-  hostname: ${"DB_HOSTNAME"},
+  username: "${DB_USERNAME}",
+  password: "${DB_PASSWORD}",
+  database: "${DB_DATABASE_TEST}",
+  hostname: "${DB_HOSTNAME}",
   pool: Ecto.Adapters.SQL.Sandbox
 
 # We don't run a server during test. If one is required,
