@@ -13,7 +13,7 @@ config :bank_stone,
 # Configures the endpoint
 config :bank_stone, BankStoneWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: System.get_env("APP_KEY_SECRET"),
+  secret_key_base: System.get_env("SECRET_KEY_BASE"),
   render_errors: [view: BankStoneWeb.ErrorView, accepts: ~w(json)],
   pubsub: [name: BankStone.PubSub, adapter: Phoenix.PubSub.PG2]
 
