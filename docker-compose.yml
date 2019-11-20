@@ -9,7 +9,12 @@ services:
       EMAIL_USERNAME: ${EMAIL_USERNAME}
       EMAIL_PASSWORD: ${EMAIL_PASSWORD}
       AUTH_GUARDIAN: ${AUTH_GUARDIAN}
-      APP_KEY_SECRET: ${APP_KEY_SECRET}
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_HOSTNAME: ${DB_HOSTNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_DATABASE_DEV: ${DB_DATABASE_DEV}
+      DB_DATABASE_TEST: ${DB_DATABASE_TEST}
     build: .
     command: /bin/bash docker_start.sh
     volumes:
@@ -25,8 +30,8 @@ services:
     volumes:
       - "./volumes/datadir:/var/lib/postgres"
     environment:
-      POSTGRES_PASSWORD: 1234
-      POSTGRES_DB: bank_stone_dev
-      POSTGRES_USER: ${DEV_DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE_DEV}
+      POSTGRES_USER: ${DB_USERNAME}
     ports:
       - "5432:5432"
