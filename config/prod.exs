@@ -10,6 +10,8 @@ use Mix.Config
 # which you should run after static files are built and
 # before starting your production server.
 config :bank_stone, BankStoneWeb.Endpoint,
+  http: [:inet6, port: System.get_env("PORT") || 4000],
+  load_from_system_env: true,
   url: [host: "example.com", port: 80],
   server: true,
   secret_key_base: "${SECRET_KEY_BASE}",
