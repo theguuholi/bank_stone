@@ -163,10 +163,12 @@ defmodule BankStone.Accounts do
         }
         |> Transactions.insert_transaction()
 
-        operation
+        operation = operation
         |> Repo.preload(:user)
         |> EmailServer.Email.withdraw_email(value)
         |> EmailServer.Mailer.deliver_now()
+
+        IO.inspect operation
 
         operation_sub
 
