@@ -2,6 +2,14 @@ version: '3'
 services:
   api:
     container_name: api
+    environment:
+      EMAIL_SMTP: ${EMAIL_SMTP}
+      EMAIL_HOSTNAME: ${EMAIL_HOSTNAME}
+      EMAIL_PORT: ${EMAIL_PORT}
+      EMAIL_USERNAME: ${EMAIL_USERNAME}
+      EMAIL_PASSWORD: ${EMAIL_PASSWORD}
+      AUTH_GUARDIAN: ${AUTH_GUARDIAN}
+      APP_KEY_SECRET: ${APP_KEY_SECRET}
     build: .
     command: /bin/bash docker_start.sh
     volumes:
@@ -19,6 +27,6 @@ services:
     environment:
       POSTGRES_PASSWORD: 1234
       POSTGRES_DB: bank_stone_dev
-      POSTGRES_USER: postgres
+      POSTGRES_USER: ${DEV_DB_USERNAME}
     ports:
-      - "5433:5433"
+      - "5432:5432"
