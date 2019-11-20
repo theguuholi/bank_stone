@@ -11,10 +11,19 @@ use Mix.Config
 # before starting your production server.
 config :bank_stone, BankStoneWeb.Endpoint,
   url: [host: "example.com", port: 80],
+  server: true,
+  secret_key_base: "${SECRET_KEY_BASE}",
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 # Do not print debug messages in production
 config :logger, level: :info
+
+config :bank_stone, BankStone.Repo,
+  adapter: Ecto.Adapters.Postgres,
+  url: "${DATABASE_URL}",
+  database: "",
+  ssl: true,
+  pool_size: 1
 
 # ## SSL Support
 #

@@ -75,7 +75,7 @@ defmodule BankStone.MixProject do
       {:argon2_elixir, "~> 1.3"},
       {:guardian, "~> 1.2"},
       {:poison, "~> 3.1"},
-      {:distillery, "~> 1.5", runtime: false},
+      {:distillery, "~> 2.0"},
       {:bamboo_smtp, "~> 2.1.0"},
       {:bamboo, "~> 1.3"}
     ]
